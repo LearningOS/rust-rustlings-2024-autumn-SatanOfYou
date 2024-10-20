@@ -3,9 +3,9 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
+use std::iter;
 
 
 #[derive(Debug)]
@@ -51,12 +51,34 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        match &mut self.root {
+            Some(ref mut tree_node) => {
+                tree_node.insert(value);
+            }
+            None => {
+                self.root = Some(Box::new(TreeNode {
+                    value,
+                    left: None,
+                    right: None,
+                }))
+            }
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        let mut iter_node = &self.root;
+        while let Some(elem) = iter_node {
+            if elem.value == value {
+                return true;
+            }else if elem.value < value {
+                iter_node = &(*elem).right;
+            }else {
+                iter_node = &(*elem).left;
+            }
+        }
+        false
     }
 }
 
@@ -67,6 +89,35 @@ where
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
         //TODO
+        if self.value == value {
+            return;
+        }else if self.value < value {
+            match &mut self.right {
+                Some(ref mut node) => {
+                    node.insert(value);
+                }
+                None => {
+                    self.right = Some(Box::new(TreeNode {
+                        value,
+                        left: None,
+                        right: None,
+                    }))
+                }
+            }
+        } else {
+            match &mut self.left {
+                Some(ref mut node) => {
+                    node.insert(value);
+                }
+                None => {
+                    self.left = Some(Box::new(TreeNode {
+                        value, 
+                        left: None,
+                        right: None,
+                    }))
+                }
+            }
+        }
     }
 }
 

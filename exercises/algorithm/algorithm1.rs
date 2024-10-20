@@ -2,10 +2,11 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
+use std::sync::Arc;
 use std::vec::*;
 
 #[derive(Debug)]
@@ -70,13 +71,45 @@ impl<T> LinkedList<T> {
         }
     }
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+    where T: PartialOrd + Clone
 	{
 		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+        if list_a.length == 0 && list_b.length == 0 {
+            return Self {
+                length: 0,
+                start: None,
+                end: None,
+            }
         }
+        let mut res = Self::new();
+        let mut ca = 0;
+        let mut cb = 0;
+        let mut la = list_a.start;
+        let mut lb = list_b.start;
+        while let (Some(elem_a), Some(elem_b)) = (la, lb) {
+            unsafe {
+                if (*elem_a.as_ptr()).val <= (*elem_b.as_ptr()).val {
+                    res.add((*elem_a.as_ptr()).val.clone());
+                    la = (*elem_a.as_ptr()).next;
+                }else {
+                    res.add((*elem_b.as_ptr()).val.clone());
+                    lb = (*elem_b.as_ptr()).next;
+                }
+            }
+        }
+        while let Some(elem_a) = la {
+            unsafe {
+                res.add((*elem_a.as_ptr()).val.clone());
+                la = (*elem_a.as_ptr()).next;
+            }
+        }
+        while let Some(elem_b) = lb {
+            unsafe {
+                res.add((*elem_b.as_ptr()).val.clone());
+                lb = (*elem_b.as_ptr()).next;
+            }
+        }
+        res
 	}
 }
 

@@ -3,10 +3,27 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
+
+fn sort<T>(array: &mut [T])
+where T:PartialOrd + Copy{
 	//TODO
+    let mut flag = false;
+    for i in 0..array.len() {
+        let mut min_index = i;
+        flag = false;
+        for j in i + 1..array.len() {
+            if array[j] < array[min_index] {
+                min_index = j;
+                flag = true;
+            }
+        }
+        if flag {
+            let temp = array[min_index];
+            array[min_index] = array[i];
+            array[i] = temp;
+        }
+    }
 }
 #[cfg(test)]
 mod tests {
